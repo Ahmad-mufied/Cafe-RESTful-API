@@ -45,9 +45,14 @@ def home():
 def get_random_coffee():
     cafes = db.session.query(Cafe).all()
     random_coffee = random.choice(cafes)
-    return jsonify(
-        cafe=random_coffee.to_dict()
-    )
+    return jsonify(cafe=random_coffee.to_dict())
+
+
+## return all the cafes in database as a JSON
+@app.route("/all")
+def get_all_cafes():
+    cafes = db.session.query(Cafe).all()
+    return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
 
 ## HTTP POST - Create Record
 
