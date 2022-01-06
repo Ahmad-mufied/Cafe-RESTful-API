@@ -24,6 +24,16 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
+    def to_dict(self):
+        dictionary = {}
+        # Loop through each column in the data record
+        for column in self.__table__.columns:
+            # Create a new dictionary entry;
+            # where the key is the name of the column
+            # and the value is the value of the column
+            dictionary[column.name] = getattr(self, column.name)
+        return dictionary
+
 
 @app.route("/")
 def home():
@@ -33,22 +43,10 @@ def home():
 ## HTTP GET - Read Record
 @app.route("/random")
 def get_random_coffee():
-    coffes = db.session.query(Cafe).all()
-    random_coffee = random.choice(coffes)
+    cafes = db.session.query(Cafe).all()
+    random_coffee = random.choice(cafes)
     return jsonify(
-        cafe={
-            "can_take_calls": random_coffee.can_take_calls,
-            "coffee_price": random_coffee.coffee_price,
-            "has_sockets": random_coffee.has_sockets,
-            "has_toilet": random_coffee.has_toilet,
-            "has_wifi": random_coffee.has_wifi,
-            "id": random_coffee.id,
-            "img_url": random_coffee.img_url,
-            "location": random_coffee.location,
-            "map_url": random_coffee.map_url,
-            "name": random_coffee.name,
-            "seats": random_coffee.seats
-        }
+        cafe=random_coffee.to_dict()
     )
 
 ## HTTP POST - Create Record
