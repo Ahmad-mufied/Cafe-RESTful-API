@@ -35,6 +35,21 @@ def home():
 def get_random_coffee():
     coffes = db.session.query(Cafe).all()
     random_coffee = random.choice(coffes)
+    return jsonify(
+        cafe={
+            "can_take_calls": random_coffee.can_take_calls,
+            "coffee_price": random_coffee.coffee_price,
+            "has_sockets": random_coffee.has_sockets,
+            "has_toilet": random_coffee.has_toilet,
+            "has_wifi": random_coffee.has_wifi,
+            "id": random_coffee.id,
+            "img_url": random_coffee.img_url,
+            "location": random_coffee.location,
+            "map_url": random_coffee.map_url,
+            "name": random_coffee.name,
+            "seats": random_coffee.seats
+        }
+    )
 
 ## HTTP POST - Create Record
 
