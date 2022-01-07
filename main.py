@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import random
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -99,6 +100,19 @@ def post_new_cafe():
     return jsonify(response={"Success": "Successfully added the new cafe"})
 
 ## HTTP PUT/PATCH - Update Record
+
+
+# Update the coffee_price field of the cafe.
+@app.route("/update-price/<cafe_id>", methods=['PATCH'])
+def update_price(cafe_id):
+    cafe = Cafe.query.get(escape(cafe_id))
+    if cafe:
+        cafe_price = request.args.get('new_price')
+        cafe.price = cafe_price
+        db.session.commit()
+        return jsonify(success="Successfully updated the price to {}".format(cafe_price))
+    else:
+        return jsonify(error={"Not Found": "Sorry a cafe with that id was not found in the database."})
 
 ## HTTP DELETE - Delete Record
 
