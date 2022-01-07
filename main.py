@@ -80,6 +80,7 @@ def str_to_boolean(value):
 def post_new_cafe():
     # Create row from value request.form
     new_cafe = Cafe(
+        id=request.form['id'],
         name=request.form['name'],
         map_url=request.form['map_url'],
         img_url=request.form['img_url'],
